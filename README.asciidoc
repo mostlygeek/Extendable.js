@@ -25,6 +25,7 @@ See: http://en.wikipedia.org/wiki/MIT_License
 
 Usage
 -----
+
 .Basic Example
 [source,javascript]
 ----
