@@ -27,7 +27,7 @@ Usage
 -----
 
 .Basic Example
-[source,javascript]
+
 ----
 var App = new Extendable(); 
 App.extend("My.Fantastic.Namespace", {
@@ -39,7 +39,6 @@ App.My.Fantastic.Namespace.foo(); // returns "bar"
 ----
 
 .Building a larger library
-[source, javascript]
 ----
 // file: src/js/main.js
 app = new Extendable(); 
