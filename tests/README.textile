@@ -1,0 +1,7 @@
+h1. About the dR JS Testing Framework
+
+* Copying ideas from the Facebook Connect-JS
+** props to FB.
+** http://github.com/facebook/connect-js/blob/master/tests/index.html
+* Based upon QUnit
+** http://docs.jquery.com/Qunit

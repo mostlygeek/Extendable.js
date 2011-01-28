@@ -1,0 +1,63 @@
+merge.js
+========
+Benson Wong <mostlygeek@gmail.com>
+
+About
+-----
+merge.js is a really simple JavaScript library for organizing a JavaScript
+library. It is inspired by the Facebook connect-js project:
+https://github.com/facebook/connect-js.
+
+The core design philosophy is to make it easy to manage, develop and debug
+your JS application. The best way to use extend.js is to split your
+functionality up into separate files. This makes debugging and managing code
+easier.
+
+In production, merge all of your JS files together and minimize them. Since
+functionality is added to the namespace through the extend() method there
+should not be any problems caused by the merging process.
+
+License
+-------
+
+MIT. 
+See: http://en.wikipedia.org/wiki/MIT_License
+
+Usage
+-----
+.Basic Example
+[source,javascript]
+----
+var App = new Extendable(); 
+App.extend("My.Fantastic.Namespace", {
+    foo : function() { 
+        return "bar"; 
+    }
+});
+App.My.Fantastic.Namespace.foo(); // returns "bar"
+----
+
+.Building a larger library
+[source, javascript]
+----
+// file: src/js/main.js
+app = new Extendable(); 
+app.extend('', {                            // <1>
+    // core stuff 
+});
+
+// file: src/js/UI.js                       // <2>
+app.extend('UI', {
+    // UI related functionality
+});
+
+app.extend('UI.misc', {
+    // app.UI.misc.x functionality
+});
+----
+
+<1> Create the core of the namespace in a main.js file (or whatever you)
+    wish to name it.
+    
+<2> Add more functionality to the namespace in separate JS files.
+    This will make debugging easier and modularize things. 
