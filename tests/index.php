@@ -4,7 +4,7 @@
     <title>qUnit tests for extend.js</title>
     <link rel="stylesheet" href="qunit.css" type="text/css" media="screen">
     <script type="text/javascript" src="qunit.js"></script>
-    <script type="text/javascript" src="../sources/extend.js"></script>
+    <script type="text/javascript" src="../sources/Extendable.js"></script>
 </head>
 <body>
     <h1 id="qunit-header">extend.js tests</h1>
