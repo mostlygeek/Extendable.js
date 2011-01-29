@@ -4,12 +4,12 @@ Benson Wong <mostlygeek@gmail.com>
 
 About
 -----
-merge.js is a really simple JavaScript library for organizing a JavaScript
-library. It is inspired by the Facebook connect-js project:
+Extendable.js is a really simple JavaScript library for organizing a
+JavaScript library. It is inspired by the Facebook connect-js project:
 https://github.com/facebook/connect-js.
 
 The core design philosophy is to make it easy to manage, develop and debug
-your JS application. The best way to use extend.js is to split your
+your JS application. The best way to use Extendable.js is to split your
 functionality up into separate files. This makes debugging and managing code
 easier.
 
