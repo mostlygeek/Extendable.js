@@ -35,7 +35,9 @@ Documentation is a little sparse right now. However, check out qunit/tests/.
 Much of the framework has a unit test for it and should decent usage
 examples.
 
-.Basic Example
+Basic Example
+~~~~~~~~~~~~~
+
 ----
 var App = new Extendable(); 
 App.extend("My.Fantastic.Namespace", {
@@ -47,7 +49,9 @@ App.extend("My.Fantastic.Namespace", {
 App.My.Fantastic.Namespace.foo(); // returns "bar"
 ----
 
-.Modularizing Functionality into Separate Files
+Modularizing Functionality into Separate Files
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ----
 // file: src/js/main.js
 App = new Extendable({                      // <1>
@@ -71,7 +75,9 @@ App.extend('UI.misc', {
 <2> Add more functionality to the namespace in separate JS files.
     This will simplify debugging and modularize code. 
 
-.Every node is an instance of Extendable()
+Every node is an instance of Extendable()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ----
 var a = new Extendable({
     name : 'a'
@@ -83,7 +89,9 @@ a.b.extend('c.d.e.f.g', { name : 'g' });
 alert(a.b.c.d.e.f.g.name); // pops up "g"
 ----
 
-.Extendable() instances behave like an EventEmitter
+Extendable() instances behave like an EventEmitter
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ----
 a = new Extendable(); 
 a.on('newNumbers', function(x, y) {                     // <1>
@@ -115,7 +123,8 @@ a.b.c.d.emit('boom');
 <4> all nodes are instances of Extendable which means they can all 
     have their own event emitters. 
     
-.Listener Context
+Listener Context
+~~~~~~~~~~~~~~~~
 
 Listers are triggered in the context of their calling object. This gives
 them convenience access to the calling object through 'this'. 
