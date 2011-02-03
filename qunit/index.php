@@ -4,7 +4,12 @@
     <title>qUnit tests for Extendable.js</title>
     <link rel="stylesheet" href="qunit.css" type="text/css" media="screen">
     <script type="text/javascript" src="qunit.js"></script>
+    <?php if (!$_GET['v']): ?>
     <script type="text/javascript" src="../sources/Extendable.js"></script>
+    <?php else:?>
+    <script type="text/javascript" src="../releases/<?php echo $_GET['v']?>"></script>
+    <?php endif;?>
+
     <script type="text/javascript" src="tests/test-Extendable.js"></script>
     <script type="text/javascript" src="tests/test-Extendable-tree.js"></script>
     <script type="text/javascript" src="tests/test-Extendable-events.js"></script>
