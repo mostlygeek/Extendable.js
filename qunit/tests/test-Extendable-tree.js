@@ -26,10 +26,10 @@ test('test namespace tree references', function() {
 
     equals('c', a.b.c.me);
     
-    equals('b', a.b.c.parent.me);
-    equals('a', a.b.c.parent.parent.me);
+    equals('b', a.b.c.parent.me);           // c.parent = b
+    equals('a', a.b.c.parent.parent.me);    // c.parent.parent = a
 
-    equals('a', a.b.c.ROOT.me);
+    equals('a', a.b.c.ROOT.me);             // ROOT = a
     equals('b', a.b.c.ROOT.b.me);
     equals('c', a.b.c.ROOT.b.c.me);
 

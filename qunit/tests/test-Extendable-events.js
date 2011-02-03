@@ -94,3 +94,21 @@ test('extended items also have event emitters', function() {
 
     equals('function', typeof a.b.c.d.e.on, "missing on() method");
 });
+
+test('context callbacks are called is the same object', function() {
+
+    var a = new Extendable({
+        me : 'a'
+    });
+
+    a.extend('b.c', {
+        me : 'c'
+    });
+
+    a.b.c.on('test', function() {
+        equals('c', this.me); 
+    });
+
+    a.b.c.emit('test'); 
+
+});

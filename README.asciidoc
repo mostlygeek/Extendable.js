@@ -4,30 +4,38 @@ Benson Wong <mostlygeek@gmail.com>
 
 About
 -----
-Extendable.js is a really simple JavaScript library for organizing a
-JavaScript project. Its design is heavily influenced by the provides()
-functionality of the Facebook connect-js project:
-https://github.com/facebook/connect-js.
+Extendable.js is a simple JavaScript library for organizing a JavaScript
+project. Its design is inspired by the provides() functionality of the
+Facebook connect-js project: https://github.com/facebook/connect-js.
 
-The core design philosophy is to simplify managing, developing and debugging
-your JS application. Extendable.js makes it easy to build a JS namespace for
-your application with code split into separate, manageable source files.
+The design philosophy is to simplify managing, developing and debugging a
+browser based JS application. Extendable.js makes it easy to construct and
+organize functionality.
 
-In production, merge all of your JS files together and minimize them. Since
-functionality is added to the namespace through the extend() method there
-should not be any problems caused by the merging process.
+Features
+--------
 
-License
--------
+- Simple pattern for creating JavaScript namespaces
+- Simple pattern for traversing the tree
+-- this.ROOT points to the top of the namespace
+-- this.parent points to one level up
+- Event emitting functionality based off of node.js EventEmitter interface  
 
-MIT. 
-See: http://en.wikipedia.org/wiki/MIT_License
+Production Deployment
+---------------------
+
+- Merge all of your JavaScript source together
+- Run them through a compressor like UglifyJS, jsmin, Google's closure
+  compiler, Yahoo's JS compressor, etc.
 
 Usage
 -----
 
-.Basic Example
+Documentation is a little sparse right now. However, check out qunit/tests/.
+Much of the framework has a unit test for it and should decent usage
+examples.
 
+.Basic Example
 ----
 var App = new Extendable(); 
 App.extend("My.Fantastic.Namespace", {
@@ -35,34 +43,95 @@ App.extend("My.Fantastic.Namespace", {
         return "bar"; 
     }
 });
+
 App.My.Fantastic.Namespace.foo(); // returns "bar"
 ----
 
-.Building a larger library
+.Modularizing Functionality into Separate Files
 ----
 // file: src/js/main.js
-app = new Extendable(); 
-app.extend('', {                            // <1>
-    // core stuff 
-});
+App = new Extendable({                      // <1>
+    me : 'App'
+}); 
 
 // file: src/js/UI.js                       // <2>
-app.extend('UI', {
+App.extend('UI', {
     // UI related functionality
 });
 
-app.extend('UI.misc', {
+App.extend('UI.misc', {
     // app.UI.misc.x functionality
 });
+
 ----
 
-<1> Create the core of the namespace in a main.js file (or whatever you)
-    wish to name it.
+<1> Create the core of the namespace in a main.js file. This file should
+    be loaded first.
     
 <2> Add more functionality to the namespace in separate JS files.
-    This will make debugging easier and modularize things. 
+    This will simplify debugging and modularize code. 
 
+.Every node is an instance of Extendable()
+----
+var a = new Extendable({
+    name : 'a'
+}); 
+
+a.extend('b', { name : 'b' } );
+a.b.extend('c.d.e.f.g', { name : 'g' }); 
+
+alert(a.b.c.d.e.f.g.name); // pops up "g"
+----
+
+.Extendable() instances behave like an EventEmitter
+----
+a = new Extendable(); 
+a.on('newNumbers', function(x, y) {                     // <1>
+    alert("I always run: " + (x + y)); 
+}); 
+
+a.once('newNumbers', function(i, j) {                   // <2>
+    alert("I only run once: " + (i + j)); 
+});
+
+a.emit('newNumbers', 1, 3);                             // <3>
+a.emit('newNumbers', 4, 5);
+
+a.extend('b.c.d', {});
+ 
+a.b.c.d.on('boom', function() {                         // <4>
+    alert('KABOOM'); 
+});
+a.b.c.d.emit('boom'); 
+----
+
+<1> add new listeners to events with on(eventName, callback)
+
+<2> listeners registered with once() are only triggered one time
+
+<3> emit events with emit(eventName, [arg1], [arg2], [...]), 
+    arguments can be passed arbitrarily.
+    
+<4> all nodes are instances of Extendable which means they can all 
+    have their own event emitters. 
+    
+.Listener Context
+
+Listers are triggered in the context of their calling object. This gives
+them convenience access to the calling object through 'this'. 
 
 ----
-include::examples/simple.js[]
+var a = new Extendable({
+    me : 'a'
+});
+
+a.extend('b.c', {
+    me : 'c'
+});
+
+a.b.c.on('test', function() {
+    alert(this.me);  // pops up "c"
+});
+
+a.b.c.emit('test'); 
 ----
