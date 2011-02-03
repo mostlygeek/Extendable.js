@@ -61,3 +61,8 @@ app.extend('UI.misc', {
     
 <2> Add more functionality to the namespace in separate JS files.
     This will make debugging easier and modularize things. 
+
+
+----
+include::examples/simple.js[]
+----

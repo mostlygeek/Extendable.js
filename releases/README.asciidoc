@@ -1,0 +1,6 @@
+About
+=====
+
+- Releases are compressed using UglifyJS 
+-- see: https://github.com/mishoo/UglifyJS
+- um, that's about it. 
