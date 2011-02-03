@@ -38,12 +38,35 @@ var window;
  * alert(x.My.Long.NameSpace.foo()); // bar
  * 
  */
-function Extendable() {    
-
-    // developer for the "new" operator, but I'm forgiving...
-    if (this === window) {        
-        return new Extendable();
+function Extendable(obj, parent)
+{
+    if (this === window) {
+        return new Extendable(obj);
     }
+
+    if (obj) {
+        this.merge(this, obj);
+    }
+
+    // create references all the way back up the tree so
+    // child elements can reference their parents, also
+    // allow for it to reference the ROOT (top most element)
+    if (parent) {
+        this.parent = parent;
+        this.ROOT = this.parent.ROOT;
+    } else {
+        this.ROOT = this;
+    }
+
+    /**
+     * Event map, this._events[eventName] = [
+     *      { ttl : n, cb : function() { ... } },
+     *      { ttl : n, cb : function() { ... } },
+     *      false,
+     *      { ttl : n, cb : function() { ... } },
+     * ]
+     */
+    this._eventMap = {};
 }
 
 Extendable.prototype = {
@@ -88,7 +111,7 @@ Extendable.prototype = {
 
             // make the level if it doesn't exist
             if (!base[part]) {
-                base[part] = {};
+                base[part] = new Extendable({}, this);
             }
 
             base = base[part]; // next level
@@ -114,5 +137,128 @@ Extendable.prototype = {
 
         // link members in the source object into myself
         this.merge(target, source, !!overwrite);
+    },
+
+    /*******************************************************
+     * Event emitting Functionality. Every Extendable object
+     * can emit events. Inspired by the node.js EventEmitter
+     * interface
+     *******************************************************/
+
+    _events : function(event) {
+        if (!this._eventMap[event]) {
+            this._eventMap[event] = [];
+        }
+        return this._eventMap[event]; 
+    },
+
+    /**
+     * Registers an event callback
+     *
+     * @param {String} event name
+     * @param {Function} callback
+     * @param {Int} tty 0 = always, 1 = once or n times
+     */
+    on : function(event, callback, tty) {
+        var events = this._events(event);
+
+        if (typeof callback != 'function') {
+            return; 
+        }
+
+        // set a default value
+        tty = tty || 0;
+
+        
+        events.push({
+            tty : tty, 
+            cb  : callback
+        });
+        
+        this.emit('newListener', callback); 
+    },
+
+    /**
+     * Registers an event listerer that only fires once
+     *
+     * @param {string} event name
+     * @param {Function} callback
+     */
+    once : function(event, callback) {
+        this.on(event, callback, 1);
+    },
+
+    /**
+     * Returns an array of the current listeners attached to 'event'
+     *
+     * @param {String} event
+     * @returns Array
+     */
+    listeners : function(event) {
+        var i, 
+            events = this._events(event),
+            data = [];
+
+        for (var i in events) {
+            if (events[i] !== false) {
+                data.push(events[i].cb); 
+            }
+        }
+
+        return data; 
+    },
+
+    /**
+     * Emits an event
+     *
+     * @param {string} Event name
+     * @param anything, parameters to be passed to the callback function
+     *
+     */
+    emit : function() {
+        var i,
+            args = [].slice.call(arguments),
+            event = args.shift(), // first element is event name
+            events = this._events(event),
+            cur;
+
+        for (i=0; i<events.length;i++) {
+            if (events[i] === false) {
+                continue; 
+            }
+
+            cur = events[i];
+            if (cur.tty === 1) {
+                events[i] = false; // never run again
+            } else if (cur.tty > 1) {
+                cur.tty = cur.tty - 1;
+            }
+
+            cur.cb.apply(this, args);             
+        }
+    },
+
+    /**
+     * Removes all listeners from the event that
+     * match callback.
+     *
+     * @param {String}
+     * @param {Function} callback
+     *
+     */
+    removeListener : function(event, callback) {
+        var i,
+            events = this._events(event);
+        
+        for (i=0; i < events.length; i++) {
+            if (events[i] == false) {
+                continue; 
+            }
+
+            if (events[i].cb == callback) {
+                events[i] = false;
+                continue; 
+            }
+        }
     }
 };
