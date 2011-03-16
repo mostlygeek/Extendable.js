@@ -34,3 +34,19 @@ test('test namespace tree references', function() {
     equals('c', a.b.c.ROOT.b.c.me);
 
 });
+
+test('Regression, parent reference not created correctly', function() {
+
+    var a = new Extendable({
+        me : 'a'
+    });
+
+    a.extend('b.c.d', {
+        me : 'd'
+    });
+
+    // use true here as qunit seems to barf on
+    // recursive check (if the bug exists)
+    equal(true, a.b.c == a.b.c.d.parent, "parent not set correctly");
+    equal(true, a == a.b.c.d.ROOT, "ROOT not set correctly");
+});

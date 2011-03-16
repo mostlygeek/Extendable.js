@@ -111,7 +111,7 @@ Extendable.prototype = {
 
             // make the level if it doesn't exist
             if (!base[part]) {
-                base[part] = new Extendable({}, this);
+                base[part] = new Extendable({}, base);
             }
 
             base = base[part]; // next level
@@ -242,7 +242,7 @@ Extendable.prototype = {
      * Removes all listeners from the event that
      * match callback.
      *
-     * @param {String}
+     * @param {String} event
      * @param {Function} callback
      *
      */
