@@ -22,9 +22,6 @@
  * THE SOFTWARE.
  */
 
-
-var window;
-
 /**
  * Creates a new Extendable object where new functionality
  * can be easily added to it.
